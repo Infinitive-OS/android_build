@@ -69,6 +69,14 @@ function check_product()
         echo "Couldn't locate the top of the tree.  Try setting TOP." >&2
         return
     fi
+
+    if (echo -n $1 | grep -q -e "^io_") ; then
+       IO_BUILD=$(echo -n $1 | sed -e 's/^io_//g')
+    else
+       IO_BUILD=
+    fi
+    export IO_BUILD
+
         TARGET_PRODUCT=$1 \
         TARGET_BUILD_VARIANT= \
         TARGET_BUILD_TYPE= \
