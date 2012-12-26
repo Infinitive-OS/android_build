@@ -488,7 +488,7 @@ function print_lunch_menu()
        echo "  (ohai, koush!)"
     fi
     echo
-    if [ "z${CM_DEVICES_ONLY}" != "z" ]; then
+    if [ "z${IO_DEVICES_ONLY}" != "z" ]; then
        echo "Breakfast menu... pick a combo:"
     else
        echo "Lunch menu... pick a combo:"
@@ -502,7 +502,7 @@ function print_lunch_menu()
         i=$(($i+1))
     done
 
-    if [ "z${CM_DEVICES_ONLY}" != "z" ]; then
+    if [ "z${IO_DEVICES_ONLY}" != "z" ]; then
        echo "... and don't forget the bacon!"
     fi
 
@@ -524,10 +524,10 @@ function brunch()
 function breakfast()
 {
     target=$1
-    CM_DEVICES_ONLY="true"
+    IO_DEVICES_ONLY="true"
     unset LUNCH_MENU_CHOICES
     add_lunch_combo full-eng
-    for f in `/bin/ls vendor/cm/vendorsetup.sh 2> /dev/null`
+    for f in `/bin/ls vendor/io/vendorsetup.sh 2> /dev/null`
         do
             echo "including $f"
             . $f
@@ -543,8 +543,8 @@ function breakfast()
             # A buildtype was specified, assume a full device name
             lunch $target
         else
-            # This is probably just the CM model name
-            lunch cm_$target-userdebug
+            # This is probably just the IO model name
+            lunch io_$target-userdebug
         fi
     fi
     return $?
@@ -593,7 +593,7 @@ function lunch()
     check_product $product
     if [ $? -ne 0 ]
     then
-        # if we can't find a product, try to grab it off the CM github
+        # if we can't find a product, try to grab it off the IO github
         T=$(gettop)
         pushd $T > /dev/null
         build/tools/roomservice.py $product
@@ -703,8 +703,8 @@ function tapas()
 function eat()
 {
     if [ "$OUT" ] ; then
-        MODVERSION=`sed -n -e'/ro\.cm\.version/s/.*=//p' $OUT/system/build.prop`
-        ZIPFILE=cm-$MODVERSION.zip
+        MODVERSION=`sed -n -e'/ro\.io\.version/s/.*=//p' $OUT/system/build.prop`
+        ZIPFILE=io-$MODVERSION.zip
         ZIPPATH=$OUT/$ZIPFILE
         if [ ! -f $ZIPPATH ] ; then
             echo "Nothing to eat"
@@ -719,6 +719,8 @@ function eat()
             done
             echo "Device Found.."
         fi
+    if (adb shell cat /system/build.prop | grep -q "ro.io.device=$IO_BUILD");
+    then
         # if adbd isn't root we can't write to /cache/recovery/
         adb root
         sleep 1
@@ -750,6 +752,9 @@ EOF
         return 1
     fi
     return $?
+    else
+        echo "The connected device does not appear to be $IO_BUILD, run away!"
+    fi
 }
 
 function omnom
@@ -1575,6 +1580,8 @@ function dopush()
         echo "Device Found."
     fi
 
+    if (adb shell cat /system/build.prop | grep -q "ro.io.device=$IO_BUILD");
+    then
     adb root &> /dev/null
     sleep 0.3
     adb wait-for-device &> /dev/null
@@ -1613,6 +1620,9 @@ function dopush()
     done
     rm -f $OUT/.log
     return 0
+    else
+        echo "The connected device does not appear to be $IO_BUILD, run away!"
+    fi
 }
 
 alias mmp='dopush mm'
