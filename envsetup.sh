@@ -719,7 +719,7 @@ function tapas()
 function eat()
 {
     if [ "$OUT" ] ; then
-        MODVERSION=`sed -n -e'/ro\.io\.version/s/.*=//p' $OUT/system/build.prop`
+        MODVERSION=$(get_build_var IO_VERSION)
         ZIPFILE=io-$MODVERSION.zip
         ZIPPATH=$OUT/$ZIPFILE
         if [ ! -f $ZIPPATH ] ; then
