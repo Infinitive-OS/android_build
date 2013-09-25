@@ -75,6 +75,7 @@ function check_product()
 
     if (echo -n $1 | grep -q -e "^io_") ; then
        IO_BUILD=$(echo -n $1 | sed -e 's/^io_//g')
+       export BUILD_NUMBER=$((date +%s%N ; echo $IO_BUILD; hostname) | openssl sha1 | sed -e 's/.*=//g; s/ //g' | cut -c1-10)
     else
        IO_BUILD=
     fi
@@ -1658,7 +1659,7 @@ alias cmkap='dopush cmka'
 function fixup_common_out_dir() {
     common_out_dir=$(get_build_var OUT_DIR)/target/common
     target_device=$(get_build_var TARGET_DEVICE)
-    if [ ! -z $CM_FIXUP_COMMON_OUT ]; then
+    if [ ! -z $IO_FIXUP_COMMON_OUT ]; then
         if [ -d ${common_out_dir} ] && [ ! -L ${common_out_dir} ]; then
             mv ${common_out_dir} ${common_out_dir}-${target_device}
             ln -s ${common_out_dir}-${target_device} ${common_out_dir}
