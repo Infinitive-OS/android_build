@@ -85,5 +85,8 @@ ifeq ($(CYNGN_TARGET),true)
 $(info   CYNGN_TARGET=$(CYNGN_TARGET))
 $(info   CYNGN_FEATURES=$(CYNGN_FEATURES))
 endif
+ifeq ($(INFINITE),TRUE)
+$(info   INFINITE=$(INFINITE))
+endif
 $(info ============================================)
 endif
