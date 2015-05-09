@@ -160,7 +160,7 @@ javac_version := $(shell echo '$(javac_version_str)' | grep '[ "]1\.8[\. "$$]')
 else # default
 required_version := "1.7.x"
 required_javac_version := "1.7"
-java_version := $(shell echo '$(java_version_str)' | grep '^java .*[ "]1\.7[\. "$$]')
+java_version := $(shell echo '$(java_version_str)' | grep 'java .*[ "]1\.7[\. "$$]')
 javac_version := $(shell echo '$(javac_version_str)' | grep '[ "]1\.7[\. "$$]')
 endif # if EXPERIMENTAL_USE_JAVA8
 
