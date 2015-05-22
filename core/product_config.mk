@@ -181,7 +181,7 @@ include $(BUILD_SYSTEM)/device.mk
 
 # A IO build needs only the IO product makefiles.
 ifneq ($(IO_BUILD),)
-  all_product_configs := $(shell ls device/*/$(IO_BUILD)/io.mk)
+  all_product_configs := $(shell find device -path "*/$(IO_BUILD)/io.mk")
 else
   ifneq ($(strip $(TARGET_BUILD_APPS)),)
   # An unbundled app build needs only the core product makefiles.
