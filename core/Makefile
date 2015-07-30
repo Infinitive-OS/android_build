@@ -1736,13 +1736,6 @@ bacon: otapackage
 	@echo -e ${CL_CYN}"Size:"${CL_MAG}" `ls -lah $(IO_TARGET_PACKAGE) | cut -d ' ' -f 5`"${CL_RST}
 	@echo -e ${CL_CYN}"==================================================="${CL_RST}
 
-ifeq ($(USE_PREBUILT_CHROMIUM),1)
-ifneq ($(PRODUCT_PREBUILT_WEBVIEWCHROMIUM),yes)
-	@echo "Running Chromium prebuilt setup script..."
-	$(hide) . $(TOPDIR)vendor/io/tools/chromium_prebuilt.sh $(TOP)
-endif
-endif
-
 bootzip: bootimage
 	$(BOOT_ZIP_FROM_IMAGE_SCRIPT) \
 	   $(recovery_fstab) \
