@@ -22,6 +22,7 @@ from shutil import rmtree, copy2, copytree
 from subprocess import call
 from zipfile import ZipFile, ZipInfo
 from hashlib import md5
+import time
 
 # declare all the variables needed
 fstab = open(argv[1], 'r').read()
@@ -43,15 +44,16 @@ try:
 except:
     raise ValueError("malformed recovery.fstab")
 
-if path.exists(defconfig):
-    prekernel_version = search('CONFIG_LOCALVERSION=.*\n', open(defconfig, 'r').read())
-    if prekernel_version:
-        kernel_version = sub(r'(CONFIG_LOCALVERSION=)|\"|\n|-', "", prekernel_version.group(0))
-        kernel_version = "%s-%s-kernel" % (kernel_version or "Slim", device)
-    else:
-        kernel_version = "Slim-%s-kernel" % device
-else:
-    kernel_version = "Slim-%s-kernel" % device
+#if path.exists(defconfig):
+    #prekernel_version = search('CONFIG_LOCALVERSION=.*\n', open(defconfig, 'r').read())
+    #if prekernel_version:
+    #    kernel_version = sub(r'(CONFIG_LOCALVERSION=)|\"|\n|-', "", prekernel_version.group(0))
+    #    kernel_version = "%s-%s-kernel" % (kernel_version or "Infinitive", device)
+    #else:
+    #    kernel_version = "Infinitive-%s-kernel" % device
+#else:
+builddate = time.strftime("%d%m%Y");
+kernel_version = "Infinitive-kernel-%s-%s" % (device,builddate)
 
 updater = "%s/obj/EXECUTABLES/updater_intermediates/updater" % out
 signer = "%s/framework/signapk.jar" % environ['ANDROID_HOST_OUT']
@@ -88,7 +90,7 @@ copy2(updater, "%s/update-binary" % updater_dir)
 updater_script = "%s/updater-script" % updater_dir
 
 # create the contents
-contents = "ui_print(\"installing Slim Kernel...\");\n"
+contents = "ui_print(\"installing Infinitive Kernel...\");\n"
 if boot_partition_type == "mtd":
     contents += "package_extract_file(\"boot.img\", \"/tmp/boot.img\");\n"
     contents += "write_raw_image(\"/tmp/boot.img\", \"%s\");\n" % boot_partition
